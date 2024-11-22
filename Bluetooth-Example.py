@@ -33,7 +33,7 @@ class SurveyApp(tk.Tk):
                 print(f"Failed to connect to {self.bluetooth_port}. Retrying...")
                 time.sleep(2)  # Wait and retry
 
-    def send_scan_command(self):
+    def normal_scan(self):
         """Send '1' to the robot to start a scan."""
         if self.ser:
             try:
@@ -41,6 +41,27 @@ class SurveyApp(tk.Tk):
                 print("Sent '1' command for scan")
             except serial.SerialException:
                 print("Error: Failed to send command")
+        self.show_waiting_screen(6)
+
+    def zoom_scan(self):
+        """Send '2' to the robot to start a zoom scan."""
+        if self.ser:
+            try:
+                self.ser.write(b'2')  # Send '2' to initiate zoom scan
+                print("Sent '2' command for zoom scan")
+            except serial.SerialException:
+                print("Error: Failed to send command")
+        self.show_waiting_screen(10)
+
+    def next_chip(self):
+        """Send '3' to the robot to start a zoom scan."""
+        if self.ser:
+            try:
+                self.ser.write(b'3')  # Send '3' to initiate zoom scan
+                print("Sent '3' command for next chip")
+            except serial.SerialException:
+                print("Error: Failed to send command")
+        self.show_waiting_screen(3)
 
     def show_welcome_page(self):
         welcome_label = tk.Label(self, text="Welcome to the Robot Controller", font=("Arial", 24))
@@ -55,11 +76,11 @@ class SurveyApp(tk.Tk):
                                  font=("Arial", 20), height=2, width=10)
         start_button.pack(pady=40)
 
-    def start_scan(self):
-        self.send_scan_command()  # Send command to start scan
-        self.show_waiting_screen()
+    # def start_scan(self):
+    #     self.send_scan_command()  # Send command to start scan
+    #     self.show_waiting_screen(16)
 
-    def show_waiting_screen(self):
+    def show_waiting_screen(self, delay):
         self.clear_window()
         loading_label = tk.Label(self, text="Waiting for Scan...", font=("Arial", 24))
         loading_label.pack(pady=100)
@@ -77,7 +98,7 @@ class SurveyApp(tk.Tk):
                                      font=("Arial", 20), height=2, width=10)
             start_button.pack(pady=20)
 
-        self.after(16 * 1000, complete_scan)  # Simulate a 3-second scan time
+        self.after(delay * 1000, complete_scan)  # Simulate a 3-second scan time
 
     def show_question_page(self):
         self.clear_window()

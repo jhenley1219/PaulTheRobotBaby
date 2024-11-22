@@ -44,25 +44,31 @@ void setup() {
   Serial3.println("Ready to receive commands.");
 }
 
-void runMotorSequence() {
-  // motor4 = front motor
-  // motor2 = back motor
-
-  // Move to chip
-  motor1.run(motorSpeed1); /* value: between -255 and 255. */
-  motor3.run(-motorSpeed);
-  delay(3500);
-
-  // Stop in front of chip and lower arm
+void lowerArm() {
+  // Lower arm
   motor1.stop();
   motor3.stop();
   motor2.run(-motorSpeed);
   delay(1500); 
   motor2.stop();
+  delay(500);
+}
 
+void raiseArm() {
+  // Raise arm
+  motor1.stop();
+  motor3.stop();
+  motor2.run(motorSpeed);
+  delay(1800);
+  motor2.stop();
+  delay(500);
+}
+
+void scanChip() {
   // Scan chip forward
   motor1.run(motorSpeed1B);
   motor3.run(-motorSpeedB);
+  motor2.stop();
   delay(2500);
   motor1.stop();
   motor3.stop();
@@ -72,22 +78,19 @@ void runMotorSequence() {
   motor1.run(-motorSpeed1B);
   motor3.run(motorSpeedB);
   delay(2500);
-
-  // Finish scanning and raise arm
-  motor1.stop();
-  motor3.stop();
-  motor2.run(motorSpeed);
-  delay(1800);
-  motor2.stop();
-  delay(500);
-
-  // Move back to starting position
-  motor1.run(-motorSpeed1);
-  motor3.run(motorSpeed);
-  delay(3200);
-  motor1.stop();
-  motor3.stop();
 }
+
+void nextChip() {
+  // Move to the next chip
+  motor1.run(motorSpeed1B);
+  motor3.run(-motorSpeedB);
+  motor2.stop();
+  delay(2600);
+  motor1.stop();
+  motor3.stop();
+  delay(500);
+}
+
 
 void loop() {
   // Check if Bluetooth has sent any data
@@ -96,10 +99,25 @@ void loop() {
 
     if (command == '1') {
       digitalWrite(LED_PIN, HIGH);   // Indicate motor sequence start with LED on
-      runMotorSequence();            // Run the motor sequence
+      scanChip();           // Run the motor sequence
       digitalWrite(LED_PIN, LOW);    // Turn off LED when sequence finishes
-      Serial3.println("Motor sequence complete.");
-    } else {
+      Serial3.println("Normal Motor sequence complete.");
+    } 
+    else if (command == '2') {
+      digitalWrite(LED_PIN, HIGH);   // Indicate motor sequence start with LED on
+      lowerArm(); 
+      scanChip();           // Run the motor sequence   
+      raiseArm();
+      digitalWrite(LED_PIN, LOW);    // Turn off LED when sequence finishes
+      Serial3.println("Zoomed Motor sequence complete.");
+    }
+    else if (command == '3') {
+      digitalWrite(LED_PIN, HIGH);   // Indicate motor sequence start with LED on
+      nextChip();
+      digitalWrite(LED_PIN, LOW);    // Turn off LED when sequence finishes
+      Serial3.println("Next chip command complete.");
+    }
+    else {
       Serial3.println("Unknown command");  // Send feedback for invalid commands
     }
   }
