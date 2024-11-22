@@ -14,16 +14,21 @@ class SurveyApp(tk.Tk):
         self.title("PCB Robot Interface")
         self.geometry("800x900")
         
+        self.bluetooth_port = 'COM8'  # Replace with your Bluetooth port
+        self.baud_rate = 9600
+        self.ser = None  # Serial object will be stored here
+        #self.connect_bluetooth()
+
         # Create unique session ID
         self.session_id = datetime.now().strftime('%Y%m%d_%H%M%S')
         
-        # Trial parameters - Modified to remove overestimation from 25 and 35 trials
+        # Trial parameters
         self.practice_trials = [
-            (25, False),   # Salient trial
-            (35, False),   # Salient trial
-            (45, False),  # Normal under threshold
-            (50, False),   # Salient trial
-            (55, False)   # Normal over threshold
+            (25, False),   
+            (35, False),   
+            (45, False),   
+            (50, False),   
+            (55, False)    
         ]
         
         # Generate experimental trials
@@ -51,6 +56,48 @@ class SurveyApp(tk.Tk):
             self.prompt = f.read()
         
         self.show_welcome()
+
+    
+    def connect_bluetooth(self):
+        """Keep retrying to connect to Bluetooth until successful."""
+        while self.ser is None:
+            try:
+                self.ser = serial.Serial(self.bluetooth_port, self.baud_rate, timeout=1)
+                print(f"Connected to {self.bluetooth_port}")
+            except serial.SerialException:
+                print(f"Failed to connect to {self.bluetooth_port}. Retrying...")
+                time.sleep(2)  # Wait and retry
+
+    def normal_scan(self):
+        """Send '1' to the robot to start a normal scan."""
+        if self.ser:
+            try:
+                self.ser.write(b'1')  # Send '1' to initiate normal scan
+                print("Sent '1' command for normal scan")
+            except serial.SerialException:
+                print("Error: Failed to send command")
+        self.show_waiting_screen(6, self.show_trial)  # After waiting, show the trial
+
+    def zoom_scan(self):
+        """Send '2' to the robot to start a zoom scan."""
+        if self.ser:
+            try:
+                self.ser.write(b'2')  # Send '2' to initiate zoom scan
+                print("Sent '2' command for zoom scan")
+            except serial.SerialException:
+                print("Error: Failed to send command")
+        self.show_waiting_screen(10, self.show_zoom_image)  # After waiting, show zoomed image
+
+    def next_chip(self):
+        """Send '3' to the robot to move to the next chip."""
+        if self.ser:
+            try:
+                self.ser.write(b'3')  # Send '3' to move to next chip
+                print("Sent '3' command for next chip")
+            except serial.SerialException:
+                print("Error: Failed to send command")
+        self.show_waiting_screen(3, self.normal_scan)  # After waiting, start normal scan for next trial
+
     def generate_experimental_trials(self):
         # Fixed erroneous trials with their target positions
         error_trials = [
@@ -74,6 +121,7 @@ class SurveyApp(tk.Tk):
             final_trials.insert(pos, (val, is_error))
             
         return final_trials
+
     def is_salient(self, percent, is_salient_trial):
         """
         Determine if the trial should recommend 'Keep' or 'Discard'.
@@ -177,133 +225,152 @@ class SurveyApp(tk.Tk):
                 font=("Arial", 16), wraplength=700).pack(pady=20)
         
         tk.Button(self, text="Start Practice",
-                 command=self.start_scan,
+                 command=self.normal_scan,
                  font=("Arial", 20), width=15).pack(pady=30)
 
-    def start_scan(self):
+    def show_waiting_screen(self, delay, next_step):
         self.clear_screen()
-        trial_type = "Practice " if self.is_practice else ""
-        tk.Label(self, text=f"Scanning {trial_type}Surface...",
-                font=("Arial", 24)).pack(pady=50)
-        
-        progress = ttk.Progressbar(self, mode='indeterminate', length=200)
-        progress.pack(pady=20)
-        progress.start()
-        
-        self.after(1000, self.show_trial)
+        loading_label = tk.Label(self, text="Processing...", font=("Arial", 24))
+        loading_label.pack(pady=100)
+
+        progress_bar = ttk.Progressbar(self, length=200, mode='indeterminate', maximum=20)
+        progress_bar.pack(pady=20)
+        progress_bar.start()
+
+        def after_wait():
+            self.clear_screen()
+            next_step()
+
+        self.after(delay * 1000, after_wait)  # Simulate delay in milliseconds
 
     def show_trial(self):
         self.clear_screen()
         self.zoom_used = False
-        
+
+        # Check if there are more trials
+        if self.current_index >= len(self.current_trials):
+            if self.is_practice:
+                self.show_transition()
+            else:
+                self.show_end()
+            return
+
         # Show trial progress
         trial_type = "Practice " if self.is_practice else ""
         tk.Label(self, 
                 text=f"{trial_type}Trial {self.current_index + 1} of {len(self.current_trials)}", 
                 font=("Arial", 16)).pack(pady=10)
-        
-        # Create display frame
-        display_frame = tk.Frame(self)
-        display_frame.pack(expand=True, fill='both', padx=20)
-        
+
         # Generate and display image
         current_trial = self.current_trials[self.current_index]
         percent, is_salient = current_trial
-        damage_pattern = self.generate_damage_pattern(percent/100)
-        bordered_image = self.add_border(damage_pattern)
-        
+        self.current_damage_pattern = self.generate_damage_pattern(percent/100)
+        bordered_image = self.add_border(self.current_damage_pattern)
+
         display_size = (200, 400)
         full_photo = ImageTk.PhotoImage(
             Image.fromarray(bordered_image).resize(display_size, Image.NEAREST))
-        
-        self.image_label = tk.Label(display_frame)
+
+        self.image_label = tk.Label(self)
         self.image_label.full_view = full_photo
         self.image_label.config(image=full_photo)
         self.image_label.pack(pady=20)
-        
+
         # Show recommendation using `is_salient`
         recommend_keep = self.is_salient(percent, is_salient)
-        tk.Label(display_frame, 
+        tk.Label(self, 
                 text=f"Robot Recommendation: {'Keep' if recommend_keep else 'Discard'}", 
                 font=("Arial", 18)).pack(pady=10)
-        
+
         # Control buttons
         bottom_frame = tk.Frame(self)
         bottom_frame.pack(fill='x', padx=20, pady=10)
-        
+
         # Zoom controls
         view_controls = tk.Frame(bottom_frame)
         view_controls.pack(fill='x', pady=(0, 10))
-        
+
         zoom_btn = tk.Button(view_controls, text="Show Zoom", 
-                            command=lambda: self.show_zoom(damage_pattern),
+                            command=self.initiate_zoom_scan,
                             font=("Arial", 12))
         zoom_btn.pack(side='left', expand=True, padx=5)
-        
-        full_btn = tk.Button(view_controls, text="Show Full", 
-                            command=lambda: self.show_full(),
-                            font=("Arial", 12), state='disabled')
-        full_btn.pack(side='right', expand=True, padx=5)
-        
+
         # Response buttons
         response_controls = tk.Frame(bottom_frame)
         response_controls.pack(fill='x', pady=(10, 0))
-        
+
         reject_btn = tk.Button(response_controls, text="Discard",
-                              command=lambda: self.record_response("Reject"),
-                              font=("Arial", 18), width=10, height=2)
+                            command=self.reject_with_next,
+                            font=("Arial", 18), width=10, height=2)
         reject_btn.pack(side='left', expand=True, padx=10)
-        
+
         accept_btn = tk.Button(response_controls, text="Keep",
-                              command=lambda: self.record_response("Accept"),
-                              font=("Arial", 18), width=10, height=2)
+                            command=self.accept_with_next,
+                            font=("Arial", 18), width=10, height=2)
         accept_btn.pack(side='right', expand=True, padx=10)
 
-    def show_zoom(self, image):
+    def initiate_zoom_scan(self):
+        self.zoom_scan()  # Send '2' to robot and show waiting screen
+
+    def show_zoom_image(self):
         self.zoom_used = True
         y, x = self.focus_pos
-        zoom = image[y:y+self.focus_size, x:x+self.focus_size]
+        zoom = self.current_damage_pattern[y:y+self.focus_size, x:x+self.focus_size]
         zoom_photo = ImageTk.PhotoImage(
             Image.fromarray(zoom).resize((300, 300), Image.NEAREST))
+        
+        # Recreate the image label since it was destroyed
+        self.clear_screen()  # Clear the waiting screen
+        self.image_label = tk.Label(self)
         self.image_label.zoom_view = zoom_photo
         self.image_label.config(image=zoom_photo)
-        
-        for widget in self.winfo_children():
-            if isinstance(widget, tk.Frame):
-                for btn in widget.winfo_children():
-                    if isinstance(btn, tk.Frame):
-                        for sub_btn in btn.winfo_children():
-                            if isinstance(sub_btn, tk.Button):
-                                if sub_btn['text'] == "Show Zoom":
-                                    sub_btn.config(state='disabled')
-                                elif sub_btn['text'] == "Show Full":
-                                    sub_btn.config(state='normal')
+        self.image_label.pack(pady=20)
 
-    def show_full(self):
-        self.image_label.config(image=self.image_label.full_view)
-        
-        for widget in self.winfo_children():
-            if isinstance(widget, tk.Frame):
-                for btn in widget.winfo_children():
-                    if isinstance(btn, tk.Frame):
-                        for sub_btn in btn.winfo_children():
-                            if isinstance(sub_btn, tk.Button):
-                                if sub_btn['text'] == "Show Zoom":
-                                    sub_btn.config(state='normal')
-                                elif sub_btn['text'] == "Show Full":
-                                    sub_btn.config(state='disabled')
+        # Show recommendation
+        current_trial = self.current_trials[self.current_index]
+        percent, is_salient = current_trial
+        recommend_keep = self.is_salient(percent, is_salient)
+        tk.Label(self, 
+                text=f"Robot Recommendation: {'Keep' if recommend_keep else 'Discard'}", 
+                font=("Arial", 18)).pack(pady=10)
+
+        # Control buttons
+        bottom_frame = tk.Frame(self)
+        bottom_frame.pack(fill='x', padx=20, pady=10)
+
+        # Response buttons
+        response_controls = tk.Frame(bottom_frame)
+        response_controls.pack(fill='x', pady=(10, 0))
+
+        reject_btn = tk.Button(response_controls, text="Discard",
+                            command=self.reject_with_next,
+                            font=("Arial", 18), width=10, height=2)
+        reject_btn.pack(side='left', expand=True, padx=10)
+
+        accept_btn = tk.Button(response_controls, text="Keep",
+                            command=self.accept_with_next,
+                            font=("Arial", 18), width=10, height=2)
+        accept_btn.pack(side='right', expand=True, padx=10)
+
+    def accept_with_next(self):
+        self.record_response("Accept")
+        # Removed self.next_chip()
+
+    def reject_with_next(self):
+        self.record_response("Reject")
+        # Removed self.next_chip()
 
     def record_response(self, response):
         current_trial = self.current_trials[self.current_index]
         percent, is_salient = current_trial
-        
+
         # Determine if the response is correct based on percent threshold
         is_correct = False
         if percent < 40:
             is_correct = (response == "Accept")
         else:
             is_correct = (response == "Reject")
-        
+
         trial_data = {
             'trial_number': self.current_index + 1,
             'trial_type': 'Practice' if self.is_practice else 'Experimental',
@@ -313,10 +380,10 @@ class SurveyApp(tk.Tk):
             'is_correct': is_correct,
             'zoom_used': self.zoom_used
         }
-        
+
         self.results.append(trial_data)
         self.save_results()
-        
+
         # Move to the next trial
         self.current_index += 1
         if self.current_index >= len(self.current_trials):
@@ -325,7 +392,7 @@ class SurveyApp(tk.Tk):
             else:
                 self.show_end()
         else:
-            self.start_scan()
+            self.next_chip()  # Move to next chip, after waiting normal scan will start
 
     def show_transition(self):
         self.clear_screen()
@@ -339,7 +406,7 @@ class SurveyApp(tk.Tk):
         self.is_practice = False
         self.current_trials = self.main_trials
         self.current_index = 0
-        self.start_scan()
+        self.normal_scan()
    
     def show_end(self):
         self.clear_screen()
