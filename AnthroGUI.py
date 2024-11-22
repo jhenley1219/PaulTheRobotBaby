@@ -14,7 +14,7 @@ class SurveyApp(tk.Tk):
         self.title("PCB Robot Interface")
         self.geometry("800x900")
         
-        self.bluetooth_port = 'COM8'  # Replace with your Bluetooth port
+        self.bluetooth_port = 'COM3'  # Replace with your Bluetooth port
         self.baud_rate = 9600
         self.ser = None  # Serial object will be stored here
         #self.connect_bluetooth()
