@@ -29,9 +29,9 @@ MeMegaPiDCMotor motor3(PORT3B);
 MeMegaPiDCMotor motor4(PORT4B);
 
 uint8_t motorSpeed = 60;
-uint8_t motorSpeedB = 40;
+uint8_t motorSpeedB = 42;
 uint8_t motorSpeed1 = 61;
-uint8_t motorSpeed1B = 42;
+uint8_t motorSpeed1B = 44;
 
 void setup() {
   // Initialize the LED pin
@@ -49,7 +49,7 @@ void lowerArm() {
   motor1.stop();
   motor3.stop();
   motor2.run(-motorSpeed);
-  delay(1500); 
+  delay(1000); 
   motor2.stop();
   delay(500);
 }
@@ -59,7 +59,7 @@ void raiseArm() {
   motor1.stop();
   motor3.stop();
   motor2.run(motorSpeed);
-  delay(1800);
+  delay(1300);
   motor2.stop();
   delay(500);
 }
@@ -69,23 +69,26 @@ void scanChip() {
   motor1.run(motorSpeed1B);
   motor3.run(-motorSpeedB);
   motor2.stop();
-  delay(2500);
+  delay(2800);
   motor1.stop();
   motor3.stop();
-  delay(500);
+  delay(200);
 
   // Scan chip backwards
   motor1.run(-motorSpeed1B);
   motor3.run(motorSpeedB);
-  delay(2500);
+  delay(2700);
+  motor1.stop();
+  motor3.stop();
+  delay(500);
 }
 
 void nextChip() {
   // Move to the next chip
-  motor1.run(motorSpeed1B);
-  motor3.run(-motorSpeedB);
+  motor1.run(motorSpeed1);
+  motor3.run(-motorSpeed);
   motor2.stop();
-  delay(2600);
+  delay(1900);
   motor1.stop();
   motor3.stop();
   delay(500);
