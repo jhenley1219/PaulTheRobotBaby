@@ -1,0 +1,5 @@
+You are an industrial worker at the HAC Engineering factory. HAC Engineering produces a number of electronic components, including printed circuit boards (PCBs) to package and distribute to contractors across the United States and Europe. PCBs are used in a variety of electronic devices, including medical devices such as pacemakers, satellite systems, automotive control systems, and telecommunication towers.
+
+It is your job to be the last line of defense before our PCBs are sent to our customers.
+
+Specifically, the PCBs need to be checked for damage to their copper layer. The copper layer contains circuitry called “traces” that carry signals between components, and can sometimes become damaged in the production process. As this is a critical task requiring a great deal of precision, our company utilizes the assistance of industrial robots to help with this task. You will now be introduced.
