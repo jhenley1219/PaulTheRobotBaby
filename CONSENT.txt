@@ -1,0 +1,86 @@
+		Permission to Take Part in a Human Research Study
+
+Title of research study: The Decorative Charm of Anthropomorphism for Perceived Transparency
+
+Investigator: Rydia Weiland
+
+Key Information: The following is a short summary of this study to help you decide whether or not to be a part of this study. More detailed information is listed later on in this form.
+
+=== Why am I being invited to take part in a research study? ===
+We invite you to take part in a research study because you are a George Mason University undergraduate student who has indicated on SONA that you are of 18+ years of age with normal to corrected vision.
+
+=== What should I know about a research study? ===
+   •   Someone will explain this research study to you.
+   •   Whether or not you take part is up to you.
+   •   You can choose not to take part.
+   •   You can agree to take part and later change your mind.
+   •   Your decision will not be held against you.
+   •   You can ask all the questions you want before you decide.
+
+=== Why is this research being done? ===
+The research is being done to further understanding of what is needed to design robots well for human-robot collaborations.
+
+=== How long will the research last and what will I need to do? ===
+We expect that you will be in this research study for approximately 30 minutes.
+You will be asked to read an introduction and answer 3 questionnaires prior to beginning the experiment. When the experiment begins, you will participate in a collaborative industrial task where you will rate scans of Principle Component Boards (PCBs), a circuit-based electronic component used in many modern technologies. After the experiment is over, you will answer 2 more questionnaires pertaining to your experience.
+
+More detailed information about the study procedures can be found under “What happens if I say yes, I want to be in this research?”
+
+=== Is there any way being in this study could be bad for me? ===
+No. Please follow the researcher’s directions at all times to ensure your safety.
+More detailed information about the risks of this study can be found under “Is there any way being in this study could be bad for me? (Detailed Risks)”
+
+=== Will being in this study help me in any way? ===
+There are no benefits to you from your taking part in this research aside from furthering research relating to human-robot interaction.
+
+=== What happens if I do not want to be in this research? ===
+For participants recruited via SONA systems the alternatives to participation are developed by course instructors who utilize SONA systems. Alternatives often consist of reading or writing assignments deemed to be comparable in time and effort to research participation. If you would like a non-research alternative for course credit, you may refer to class syllabi or instructors.
+
+Participation in research is completely voluntary. You can decide to participate, not participate, or discontinue participation at any time without penalty or loss of benefits to which you are otherwise entitled.
+
+
+
+		Detailed Information:
+		The following is more detailed information about this study in addition to the information listed above.
+
+=== Regarding your risks: ===
+Follow the instructions of the researcher at all times. Alert the researcher if you at any point become uncomfortable, distressed, physically or mentally unwell, or otherwise. There are no risks to you for participating in the current study. However, a first aid kit is available onsite. You will be referred to GMU CAPS if you express psychological distress. 
+
+=== Who can I talk to? ===
+If you have questions, concerns, or complaints, or think the research has hurt you, talk to the research team at sweilan@gmu.edu, tshaw4@gmu.edu, or eroesle@gmu.edu. 
+The Primary Investigator for this study is Rydia (Sara) Weiland who can be contacted at sweilan@gmu.edu or 952-567-0129.
+This research has been reviewed and approved by an Institutional Review Board (“IRB”). You may talk to them at 703-993-6801 or irb@gmu.edu if:
+   •   Your questions, concerns, or complaints are not being answered by the research team.
+   •   You cannot reach the research team.
+   •   You want to talk to someone besides the research team.
+   •   You have questions about your rights as a research subject.
+   •   You want to get information or provide input about this research.
+
+=== How many people will be studied? ===
+We expect about 86 people out of 86 total participants will be in this research study.
+
+=== What happens if I say yes, I want to be in this research? ===
+You will be given verbal instructions by the researcher to press continue on screen. You will take 3 short onscreen questionnaires and then be introduced to the task. The task is designed to simulate an industrial worker’s job scanning boards. You will view these scans and accept or reject them. After the trials are over, you will take 2 more questionnaires. The experiment will then conclude, and you will be thanked for your time and escorted out by the researcher. 
+
+=== What happens if I say yes, but I change my mind later? ===
+You can leave the research at any time; it will not be held against you.
+If you decide to leave the research prior to consenting, you will receive partial credit. If you decide to leave the research after consenting, you will receive full credit. If you decide to leave the research, contact the investigator so that the investigator can help shut down the experiment and guide you out of the experiment room. The investigator is available onsite at all times outside of the experiment room.
+
+=== Is there any way being in this study could be bad for me? (Detailed Risks) ===
+While there is no anticipated risk to you for participating in the current study, it is important to follow the researcher’s directions at all times. Please review the following sections for potential risks should you divert from the research instructions:
+	1.	Physical Risks
+Physical injury may occur if you interact with the technology used in the experiment wrongly. Please do not interact with any material in the experiment room aside from the mouse attached to the computer in front of you. If other material is interacted with, minor injury such as cuts, bruises, pinching, laceration, hand injury, scrapes, or strains may occur. In case of injury during testing procedures, the GMU research team may provide basic first aid.  If appropriate, the staff will call the emergency response team at 911. Neither GMU nor the investigators have funds available for payment of medical treatment for injuries that you may sustain while participating in this research.  Should you need medical care, you or your insurance carrier will be responsible for payment of the expenses required for medical treatment.
+Interacting with a computer for an extended period of time may cause minor eye strain to occur. In rare cases, headaches, nausea, or epileptic seizure due to changing screens may occur. Please notify the researcher if you need to take a break or cease participation for any reason. 
+	2.	Psychological Risks
+There is little chance you will incur psychological distress during the study. In rare cases, poor task performance may cause minor frustration. Extended task duration may also cause frustration or distress. Please notify the researcher if you need to take a break or cease participation for any reason.
+There is always a slight chance that someone might feel upset after participating. Please note that if you do feel upset and would like to speak with someone, you can contact the George Mason Counseling and Psychological Services Center (CAPS) at (703) 993-2380.
+
+=== What happens to the information collected for the research? ===
+Efforts will be made to limit the use and disclosure of your personal information, including research study and medical records, to people who have a need to review this information. We cannot promise complete secrecy. Organizations that may inspect and copy your information include the IRB and other representatives of this organization. 
+Participants may review Qualtrics’s website for their information about their privacy statement (https://www.qualtrics.com/privacy-statement/).
+
+While no computer transmission can be perfectly secure, reasonable efforts will be made to protect the confidentiality of your transmission.
+The Institutional Review Board (IRB) committee that monitors research on human subjects may inspect study records during internal auditing procedures and are required to keep all information confidential.
+
+=== Will my data or samples be used for future research? ===
+No.
