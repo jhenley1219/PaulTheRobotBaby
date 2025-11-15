@@ -2,6 +2,18 @@
 
 This project is a human-robot interaction study that involves a physical robot controlled by an Arduino and a Python-based GUI for user interaction. The robot, named "Paul," is designed to assist in a quality control task of inspecting Printed Circuit Boards (PCBs).
 
+## Quick Start Guide
+
+1.  **Setup the hardware and software** by following the [Setup](#setup) instructions below.
+2.  **Install Python packages**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  **Run the GUI**:
+    ```bash
+    python AnthroGUI.py
+    ```
+
 ## Project Overview
 
 The project consists of three main components:
@@ -17,6 +29,7 @@ The project consists of three main components:
 *   `AnthroFraming_09-04-24.ino`: An Arduino sketch that runs on the MeMegaPi board. It controls the robot's motors for movement and the arm, and reads data from line-following sensors. It communicates with the Python GUI via a serial connection (Bluetooth).
 *   `AnthroGUI.py`: The main Python application for the user study. It uses `tkinter` to create a graphical user interface that guides the user through a consent form, questionnaires, and the main experimental task. It communicates with the Arduino to control the robot.
 *   `Bluetooth-Example.py`: A simplified Python script for testing Bluetooth communication with the robot.
+*   `requirements.txt`: A list of Python packages required to run the GUI.
 
 ### Text and Data Files
 
@@ -103,18 +116,57 @@ The Python GUI is a `tkinter` application that manages the user study.
 *   `on_closing()`: A handler for when the application window is closed.
 *   `clear_screen()`: Clears all widgets from the application window.
 
+## Setup
+
+### Arduino Setup
+
+1.  **Install Arduino IDE**: Download and install the [Arduino IDE](https://www.arduino.cc/en/software) for your operating system.
+2.  **Install MeMegaPi Library**:
+    *   In the Arduino IDE, go to `Sketch > Include Library > Manage Libraries...`.
+    *   Search for "MeMegaPi" and install the library by Makeblock.
+3.  **Connect the MeMegaPi Board**:
+    *   Plug the MeMegaPi board into your computer using a USB cable.
+    *   Power on the board.
+4.  **Select Board and Port**:
+    *   In the Arduino IDE, go to `Tools > Board` and select "Arduino Mega or Mega 2560".
+    *   Go to `Tools > Port` and select the serial port corresponding to your MeMegaPi board.
+5.  **Verify and Flash the Code**:
+    *   Open the `AnthroFraming_09-04-24.ino` file in the Arduino IDE.
+    *   Click the "Verify" button (checkmark icon) to compile the code and check for errors.
+    *   Click the "Upload" button (arrow icon) to flash the code to the MeMegaPi board.
+6.  **MeMegaPi Datasheet**: For more information on the MeMegaPi board and pin information, refer to the [Makeblock Me MegaPi documentation](https://www.makeblock.com/project/me-megapi).
+
+### Python Setup
+
+1.  **Install Python**: Download and install [Python](https://www.python.org/downloads/) (version 3.6 or higher) for your operating system.
+2.  **Install Visual Studio Code**: Download and install [Visual Studio Code](https://code.visualstudio.com/), a popular code editor.
+3.  **Find the Bluetooth Serial Port**:
+    *   **Windows**: Open the Device Manager, expand the "Ports (COM & LPT)" section, and look for the serial port associated with your Bluetooth module (e.g., `COM3`).
+    *   **macOS**: Open the Terminal and run `ls /dev/tty.*`. Look for a device that corresponds to your Bluetooth module (e.g., `/dev/tty.Bluetooth-Incoming-Port`).
+    *   **Linux**: Open the Terminal and run `ls /dev/tty*`. Look for a device like `/dev/ttyUSB0` or `/dev/ttyACM0`.
+4.  **Update the Port in `AnthroGUI.py`**:
+    *   Open `AnthroGUI.py` in VS Code or your preferred editor.
+    *   Find the line `self.bluetooth_port = 'COM3'` and replace `'COM3'` with the serial port you found in the previous step.
+5.  **Install Python Packages**:
+    *   Open a terminal or command prompt in the project directory.
+    *   Run the following command to install the required packages:
+        ```bash
+        pip install -r requirements.txt
+        ```
+
 ## How to Run
 
 1.  **Hardware Setup**:
-    *   Upload the `AnthroFraming_09-04-24.ino` sketch to the MeMegaPi board.
+    *   Ensure the `AnthroFraming_09-04-24.ino` sketch is uploaded to the MeMegaPi board.
     *   Power on the robot.
     *   Ensure the Bluetooth module is connected and paired with the computer running the Python GUI.
 
 2.  **Software Setup**:
-    *   Install the required Python libraries: `pyserial`, `numpy`, and `Pillow`.
-    *   `pip install pyserial numpy Pillow`
-    *   Update the `bluetooth_port` variable in `AnthroGUI.py` to the correct serial port for your Bluetooth connection.
-    *   Run the `AnthroGUI.py` script: `python AnthroGUI.py`
+    *   Ensure you have completed the [Python Setup](#python-setup) steps.
+    *   Run the `AnthroGUI.py` script:
+        ```bash
+        python AnthroGUI.py
+        ```
 
 ## Data Collection
 
